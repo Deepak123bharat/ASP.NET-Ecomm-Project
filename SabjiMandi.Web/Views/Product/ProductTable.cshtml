@@ -1,0 +1,234 @@
+﻿@model SabjiMandi.Web.ViewModels.ProductSearchViewModel
+@{ ViewBag.Title = "ProductTable"; }
+
+<div>
+    <form method="post">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="form-group">
+                    <label>Search</label>
+                    <input class="form-control" id="searchTxt" name="Search" value="@Model.SearchTerm" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Action</label>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <button class="btn btn-primary form-control" type="button" id="searchBtn">Search</button>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-primary form-control" type="button" id="resetBtn">Reset</button>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-primary form-control" type="button" id="newBtn">New</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div>
+    <table id="ProductsTable" class="table table-striped">
+        <thead>
+            <tr>
+                <th class="font-weight-bold">Product Name</th>
+                <th class="font-weight-bold">Category</th>
+                <th class="font-weight-bold">Price</th>
+                <th class="font-weight-bold wrap-td">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Products != null && Model.Products.Count > 0)
+            {
+
+                foreach (var product in Model.Products)
+                {
+    <tr>
+        <td>@product.Name</td>
+        <td>
+            @if (product.Category != null)
+            {
+    <text>@product.Category.Name</text> }
+else
+{
+    <text>-</text>}
+        </td>
+        <td>@product.Price</td>
+        <td class="wrap-td">
+            <button class="editBtn" data-id="@product.ID">Edit</button>
+            <button class="deleteBtn" data-id="@product.ID">Delete</button>
+            <button class="addtoCart" data-id="@product.ID">Add To Cart</button>
+        </td>
+    </tr> }
+                }
+                else
+                {
+    <tr>
+        <td class="text-danger" colspan="4">No Products found.</td>
+    </tr>}
+        </tbody>
+    </table>
+    <div>
+        @if (Model.Pager != null)
+        {
+            <div class="product-pagination text-center clearfix">
+                <ul class="flat-pagination">
+                    @if (Model.Pager.CurrentPage > 1)
+                    {
+                        <li class="prev">
+                            <a href="@Url.Action("Index", "Product", new { pageNo = Model.Pager.StartPage, search = Model.SearchTerm })"><i class="fa fa-angle-double-left"></i></a>
+                        </li>
+                        <li class="prev">
+                            <a href="@Url.Action("Index", "Product", new { pageNo = Model.Pager.CurrentPage - 1, search = Model.SearchTerm })"><i class="fa fa-angle-left"></i></a>
+                        </li>
+                        <li><a href="@Url.Action("Index", "Product", new { pageNo = 1, search = Model.SearchTerm })">1</a></li>
+                    }
+                    @for (var page = Model.Pager.CurrentPage; page <= Model.Pager.EndPage; page++)
+                    {
+                        string activeClass = Model.Pager.CurrentPage == page ? "active bg-info" : string.Empty;
+
+                        <li class="@activeClass"><a href="@Url.Action("Index", "Product", new { pageNo = page, search = Model.SearchTerm })" title="">@page</a></li>
+                    }
+
+                    @if (Model.Pager.CurrentPage < Model.Pager.TotalPages)
+                    {
+
+                        <li><a href="@Url.Action("Index", "Product", new { pageNo = Model.Pager.CurrentPage + 1, search = Model.SearchTerm })"><i class="fa fa-angle-right"></i></a></li>
+                        <li><a href="@Url.Action("Index", "Product", new { pageNo = Model.Pager.EndPage, search = Model.SearchTerm })"><i class="fa fa-angle-double-right"></i></a></li>
+                    }
+                </ul><!-- /.flat-pagination -->
+            </div>
+        }
+
+    </div>
+</div>
+
+<script>
+
+    $(".pageButtons").click(function () {
+        $.ajax({
+            url: '@Url.Action("ProductTable","Product")',  //'/Product/ProductTable',
+            data: {
+                pageNo: $(this).attr("data-pageNo")
+            }
+        })
+            .done(function (response) {
+                $("#tableContainer").html(response);
+            })
+            .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("FAIL");
+            });
+    });
+
+    $("#searchBtn").click(function () {
+        var searchValue = $("#searchTxt").val();
+
+        $.ajax({
+            url: '@Url.Action("ProductTable","Product")',  //'/Product/ProductTable',
+            data: {
+                search: searchValue
+            }
+        })
+            .done(function (response) {
+                $("#tableContainer").html(response);
+            })
+            .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("FAIL");
+            });
+    });
+
+    $("#resetBtn").click(function () {
+
+        $.ajax({
+            url: '@Url.Action("ProductTable","Product")',  //'/Product/ProductTable',
+        })
+            .done(function (response) {
+                $("#tableContainer").html(response);
+                $("#actionContainer").html("");
+            })
+            .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("FAIL");
+            });
+    });
+
+    $("#newBtn").click(function () {
+        $.ajax({
+            url: '@Url.Action("Create","Product")',  //'/Product/Create',
+        })
+            .done(function (response) {
+                $("#actionContainer").html(response);
+
+                focusAction("actionContainer");
+            })
+            .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("FAIL");
+            });
+    });
+
+    $(".editBtn").click(function () {
+        $.ajax({
+            url:'@Url.Action("Edit","Product")',  // '/Product/Edit',
+            data: {
+                ID: $(this).attr('data-id')
+            }
+        })
+            .done(function (response) {
+                $("#actionContainer").html(response);
+
+                focusAction("actionContainer");
+            })
+            .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("FAIL");
+            });
+    });
+
+    $(".deleteBtn").click(function () {
+
+        swal({
+            title: "Confirm?",
+            text: "Are you sure you want to delete this product?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("Delete","Product")',  //'/Product/Delete',
+                        data: {
+                            ID: $(this).attr('data-id')
+                        }
+                    })
+                        .done(function (response) {
+                            $("#tableContainer").html(response);
+
+                            swal("Record deleted Successfully.", {
+                                icon: "success",
+                            });
+                        })
+                        .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                            alert("FAIL");
+                        });
+
+                }
+            });
+
+    });
+
+    var products = [];
+    $(".addtoCart").click(function () {
+        var productID = $(this).attr('data-id');
+
+        products.push(productID);
+
+        $.cookie('CartProducts', products.join('-'), { path: '/' });
+
+        alert("Product added to Cart.");
+    });
+
+    
+</script>

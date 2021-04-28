@@ -1,0 +1,105 @@
+﻿@model NewProductViewModel
+@{
+    ViewBag.Title = "Create";
+    var ImageUrl = "/Content/images/system/placeholder-image.png";
+
+}
+
+<h2>Create Product</h2>
+
+<form id="createProduct">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label>Category</label>
+                <select class="form-control" name="CategoryID">
+                    @foreach (var category in Model.AvailableCategories)
+                    {
+        <option value="@category.ID">@category.Name</option>
+}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Name</label>
+                <input class="form-control" name="Name" />
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <input class="form-control" name="Description" />
+            </div>
+            <div class="form-group">
+                <label>Price</label>
+                <input class="form-control" name="Price" />
+            </div>
+            <div class="form-group">
+                <label>Image</label>
+                <input type="hidden" id="ImageUrl" name="ImageUrl" />
+                <input class="form-control" id="imageUpload" name="Image" type="file" accept=".png, .jpg" />
+            </div>
+            <button id="saveBtn" type="button" class="btn btn-primary">Save</button>
+            <button id="cancelBtn" type="button" class="btn btn-primary">Cancel</button>
+        </div>
+        <div class="col-md-4">
+            <div class="thumb">
+                <img class="img-thumbnail img-fluid" id="categoryImage" src="@ImageUrl" />
+            </div>
+        </div>
+    </div>
+   
+</form>
+
+<script>
+    $("#imageUpload").change(function () {
+		var element = this;
+
+		var formData = new FormData();
+
+		var totalFiles = element.files.length;
+
+		for (var i = 0; i < totalFiles; i++) {
+			var file = element.files[i];
+			formData.append("Photo", file);
+		}
+
+		$.ajax({
+			type: 'POST',
+			url:'@Url.Action("UploadImage","Shared")',     //'/Shared/UploadImage',
+			dataType: 'json',
+			data: formData,
+			contentType: false,
+			processData: false
+		})
+        .done(function (response) {
+        	console.log(response);
+
+        	if(response.Success)
+        	{
+        		$("#ImageUrl").val(response.ImageUrl);
+        		$("#categoryImage").attr("src", response.ImageUrl);
+        	}
+        })
+        .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+        	alert("FAIL");
+        });
+	});
+	$("#saveBtn").click(function () {
+		$.ajax({
+			type: 'POST',
+			url: '/Product/Create',
+			data: $("#createProduct").serialize()
+		})
+        .done(function (response) {
+        	$("#tableContainer").html(response);
+        	$("#actionContainer").html("");
+
+        })
+        .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+        	alert("FAIL");
+        });
+    });
+
+    $("#cancelBtn").click(function () {
+        $("#actionContainer").html("");
+        focusAction("tableContainer");
+    })
+</script>

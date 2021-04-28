@@ -1,0 +1,79 @@
+﻿@model ProductsWidgetViewModel
+
+@{
+    var defaultImageUrl = "/Content/images/system/placeholder-image.png";
+}
+
+@if (Model != null && Model.Products != null)
+{
+
+    <div>
+        @if (!Model.IsLatestProduct && Model.ShowCategory)
+        {
+            <ul class="flat-filter style-1 text-center max-width-682 clearfix">
+                <li class="active">
+                    <a href="#" data-filter="*">All Product</a>
+                </li>
+
+                @foreach (var category in Model.Products.Select(x => x.Category).ToList().Distinct())
+                {
+                    <li>
+                        <a href="#" data-filter=".@category.Name">@category.Name</a>
+                    </li>
+                }
+            </ul>
+            <div class="divider h54"></div>
+        }
+    </div>
+    <div class="product-content product-fourcolumn clearfix" style="padding-bottom:20px;">
+        <ul class="product style2 isotope-product clearfix">
+            @foreach (var product in Model.Products)
+            {
+                <li class="product-item @product.Category.Name">
+                    <div class="product-thumb clearfix" style="padding-bottom:20px;">
+                        <a href="@Url.Action("Details", "Product", new { ID = product.ID })" class="product-thumb">
+                            @{
+                                var ImageUrl = (string.IsNullOrEmpty(product.ImageUrl)) ? defaultImageUrl : product.ImageUrl;
+                            }
+                            <img src="@ImageUrl" alt="image">
+                        </a>
+                        <span class="new">New</span>
+                    </div>
+                    <div class="product-info text-center clearfix">
+                        <span class="product-title">@product.Name</span>
+                        <div class="price">
+                            <ins>
+                                <span class="amount">$@product.Price</span>
+                            </ins>
+                        </div>
+                    </div>
+                    <div class="add-to-cart text-center">
+                        <a class="productAddToCart" data-id="@product.ID">ADD TO CART</a>
+                    </div>
+                    <a href="#" class="like"><i class="fa fa-heart-o"></i></a>
+                </li>
+            }
+        </ul>
+    </div>
+    <script>
+    var products;
+    $(".productAddToCart").click(function () {
+
+        var existingCookieData = $.cookie('CartProducts');
+
+        if (existingCookieData != undefined && existingCookieData != "" && existingCookieData != null) {
+            products = existingCookieData.split('-');
+        }
+        else {
+            products = [];
+        }
+
+        var productID = $(this).attr("data-id");
+        products.push(productID);
+
+        $.cookie('CartProducts', products.join('-'), { path: '/' });
+        UpdateCartProducts();
+        swal("Done", "Product added to cart", "success");
+    });
+    </script>
+}

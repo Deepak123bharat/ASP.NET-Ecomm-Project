@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{AEF1AC36-23C5-49C3-9733-86740EB96AFE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SabjiMandi.Database</RootNamespace>
+    <AssemblyName>SabjiMandi.Database</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CBContext.cs" />
+    <Compile Include="Migrations\202104151946140_initilized.cs" />
+    <Compile Include="Migrations\202104151946140_initilized.Designer.cs">
+      <DependentUpon>202104151946140_initilized.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202104171957538_ImageUrlAdded.cs" />
+    <Compile Include="Migrations\202104171957538_ImageUrlAdded.Designer.cs">
+      <DependentUpon>202104171957538_ImageUrlAdded.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202104190130252_addedIsFeatured.cs" />
+    <Compile Include="Migrations\202104190130252_addedIsFeatured.Designer.cs">
+      <DependentUpon>202104190130252_addedIsFeatured.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202104190441528_addedImageToProduct.cs" />
+    <Compile Include="Migrations\202104190441528_addedImageToProduct.Designer.cs">
+      <DependentUpon>202104190441528_addedImageToProduct.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202104200023175_addedConfigurationTable.cs" />
+    <Compile Include="Migrations\202104200023175_addedConfigurationTable.Designer.cs">
+      <DependentUpon>202104200023175_addedConfigurationTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202104211205138_Update.cs" />
+    <Compile Include="Migrations\202104211205138_Update.Designer.cs">
+      <DependentUpon>202104211205138_Update.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202104230544187_DataValidation.cs" />
+    <Compile Include="Migrations\202104230544187_DataValidation.Designer.cs">
+      <DependentUpon>202104230544187_DataValidation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202104261711001_AddedOrderTable.cs" />
+    <Compile Include="Migrations\202104261711001_AddedOrderTable.Designer.cs">
+      <DependentUpon>202104261711001_AddedOrderTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202104261817161_addedQuantityInOrderItems.cs" />
+    <Compile Include="Migrations\202104261817161_addedQuantityInOrderItems.Designer.cs">
+      <DependentUpon>202104261817161_addedQuantityInOrderItems.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SabjiMandi.Entities\SabjiMandi.Entities.csproj">
+      <Project>{E0B33869-7106-4CCD-AAFF-E8CFB60425DF}</Project>
+      <Name>SabjiMandi.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202104151946140_initilized.resx">
+      <DependentUpon>202104151946140_initilized.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202104171957538_ImageUrlAdded.resx">
+      <DependentUpon>202104171957538_ImageUrlAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202104190130252_addedIsFeatured.resx">
+      <DependentUpon>202104190130252_addedIsFeatured.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202104190441528_addedImageToProduct.resx">
+      <DependentUpon>202104190441528_addedImageToProduct.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202104200023175_addedConfigurationTable.resx">
+      <DependentUpon>202104200023175_addedConfigurationTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202104211205138_Update.resx">
+      <DependentUpon>202104211205138_Update.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202104230544187_DataValidation.resx">
+      <DependentUpon>202104230544187_DataValidation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202104261711001_AddedOrderTable.resx">
+      <DependentUpon>202104261711001_AddedOrderTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202104261817161_addedQuantityInOrderItems.resx">
+      <DependentUpon>202104261817161_addedQuantityInOrderItems.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
